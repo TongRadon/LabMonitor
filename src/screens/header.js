@@ -26,14 +26,14 @@ export default class Headerscreen extends Component {
 	render() {
     return (
     <View style={{
-    	height: 32,
+    	height: 60,
     	color: 'white',
     	flexDirection: 'row',
     	justifyContent: 'flex-start',
     	alignItems: 'center'
     }}>
 
-      <TouchableHighlight style = {{marginRight: 0, marginTop: 0}}
+      <TouchableHighlight style = {{marginRight: 10, marginTop: 30}}
       		onPress={() => {
       			const {navigate} = this.props.navigation;
       			navigate('DrawerOpen');

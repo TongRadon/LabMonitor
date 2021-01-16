@@ -1,11 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React, {Component} from 'react';
 import {
   SafeAreaView,
@@ -19,7 +11,6 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback
 } from 'react-native';
-
 import {
   Header,
   LearnMoreLinks,
@@ -30,9 +21,9 @@ import {
 import {NavigationActions} from 'react-navigation';
 import PropTypes from 'prop-types';
 import {LoginScreen, MainScreen} from '../screens/screenNames';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import Main from './main';
-const ACCESS_TOKEN = 'token';
+const ACCESS_TOKEN = 'access_token';
 
 export default class Login extends Component {
   constructor(props){
@@ -50,28 +41,27 @@ export default class Login extends Component {
   }
 
   _loadInitialState = async () => {
-      let token = await AsyncStorage.getItem(ACCESS_TOKEN);
-      if (token !== null) {
-          this.props.navigation.navigate('Main'); 
+      let token2 = await AsyncStorage.getItem(ACCESS_TOKEN);
+      if (token2 !== null) {
+          this.props.navigation.navigate('MainScreen'); 
       }
   }
 
-  async storeToken(token) {
-      try {
-          await AsyncStorage.setItem(ACCESS_TOKEN, token);
-          this.getToken();
-      } catch(error) {
-          console.log("Something went wrong")
-      }
+  storeToken = async(token) => {
+    try{
+      await AsyncStorage.setItem(ACCESS_TOKEN, token);
+      console.log("Store OK");
+    }catch(e){
+      console.log("Something went wrong store");
+    }
   }
-
-  async getToken() {
-      try {
-          let token = await AsyncStorage.getItem(ACCESS_TOKEN);            
-          console.log("token is:" + token);
-      } catch(error) {
-          console.log("Something went wrong")
-      }
+  getToken = async() =>{
+    try{
+      var token = await AsyncStorage.getItem(ACCESS_TOKEN);            
+      console.log("token get is:" + token);
+    }catch(e){
+      console.log("Something went wrong get");
+    }
   }
 
   async onLoginButtonPress() {
@@ -90,15 +80,12 @@ export default class Login extends Component {
           let res = await response.json();
           if (response.status >= 200 && response.status < 300) {
               this.setState({error: ""});
-              let token = res.token;
-              this.storeToken(token);                       
+              var token = res.token;                      
               console.log("Response success is: " + token);
-
+              this.storeToken(token); 
+              this.getToken();
               this.props.navigation.navigate('MainScreen');
-              //alert('valid username or password');
           } else {
-              //let error = res;
-              //throw error;
               alert('Invalid username or password')
               
           }
@@ -134,7 +121,7 @@ export default class Login extends Component {
               placeholder="Enter your email"
               keyboardType='email-address'
               onChangeText={(email)=>this.setState({email})}
-              
+              autoCapitallize="none" 
               >
               </TextInput>
             </View>
@@ -146,7 +133,6 @@ export default class Login extends Component {
               placeholder="Enter your password"
               secureTextEntry={true}
               onChangeText={(password)=>this.setState({password})}
-              
               >
               </TextInput>
             </View>
@@ -161,8 +147,6 @@ export default class Login extends Component {
       </TouchableWithoutFeedback> 
      );
   }
-
-
 }
 
 const styles = StyleSheet.create({
@@ -212,7 +196,6 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     alignItems: 'center',
     backgroundColor:'#3b5998'
-
   },
   textInputLogin: {
     width: 280,
@@ -221,3 +204,4 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
 })
+export{ACCESS_TOKEN};

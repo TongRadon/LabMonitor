@@ -1,22 +1,19 @@
 import React from 'react';
-import { View, Text } from 'react-native';
-import { StackNavigator, NavigationActions, createAppContainer } from 'react-navigation';
+import { View, Text, Dimensions, SafeAreaView, ListItem, List, Image} from 'react-native';
+import { StackNavigator, NavigationActions, createAppContainer} from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StyleSheet } from 'react-native';
 import { StatusBar } from 'react-native';
 import Login from '../screens/login';
 import Main from '../screens/main';
-import {LoginScreen, MainScreen} from '../screens/screenNames';
-const styles = StyleSheet.create({
-      header: {
-        backgroundColor: 'transparent',
-        position: 'absolute',
-        height: 50
-      },
-  });
+import DashBoard from '../screens/dashboard';
+import Logout from '../screens/logout';
+import Profile from '../screens/profile';
+import {LoginScreen, MainScreen, LogoutScreen, ProfileScreen, DashBoardScreen} from '../screens/screenNames';
+import { ScrollView } from 'react-native-gesture-handler';
 
-const AppNavigator = createAppContainer(createStackNavigator(
+const AppNavigator= createAppContainer(createStackNavigator(
     {
       LoginScreen: {
         screen: Login,
@@ -25,12 +22,20 @@ const AppNavigator = createAppContainer(createStackNavigator(
         }
       },
       MainScreen: {
-        screen: Main
+        screen: Main,
+        navigationOptions: {
+          headerShown: false
+        }
+      },
+      DashBoardScreen: {
+        screen: DashBoard,
+        navigationOptions: {
+          headerShown: false
+        }
       },
     },
     {
       headerMode: 'screen',
     })
 );
-
 export default AppNavigator;
