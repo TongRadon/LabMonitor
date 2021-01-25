@@ -1,21 +1,5 @@
 import React, {Component} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-  TextInput,
-  Keyboard,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  TouchableHighlight,
-  Image,
-  Button,
-  RefreshControl
-} from 'react-native';
-import { NavigationActions } from 'react-navigation';
+import { View, Text, ImageBackground, TouchableOpacity, Image, RefreshControl,StyleSheet} from 'react-native';
 import Headerscreen from './header';
 import {MainScreen, DashBoardScreen} from '../screens/screenNames';
 import DashBoard from './dashboard';
@@ -23,31 +7,32 @@ import { FlatList } from 'react-native-gesture-handler';
 import {onLoadLabs} from '../data/get_listlab';
 const backgroundColor = '#0067a7';
 
-class FlatListItem extends Component {
-    render() {
-        return (
-            <View style={{
-                flex: 1,
-                backgroundColor: 'white',
-                flexDirection: 'row'
-            }}>
-                
-                <View style={{
-                    flex: 1,
-                    flexDirection:'column'
-                }}>
-                    <Text style={{
-                        width: 280,
-                        color: 'black',
-                        fontSize: 20,
-                        textAlign: 'left'
-                    }}>{this.props.item.device_name}</Text>
-                </View>
-            </View>
-        );
-    }
-}
+function FlatListItem({ item, navigate}) {
+    return (
+      <View style={styles.listItem}>
+        <Image source = {{uri: 'http://103.199.7.185/images/lab8.png'}}  style={{width:60, height:60,borderRadius:30}} />
+        <View style={{alignItems:"center",flex:1}}>
+          <Text style={{fontWeight:"bold",margin:20,justifyContent:"center",alignItems:"center"}}>{item.device_name}</Text>
+        </View>
+        <TouchableOpacity style={{height:50,width:50, justifyContent:"center",alignItems:"center"}}
+            onPress={()=>navigate('DashBoardScreen')}>
+          <Text style={{color:"green"}}>View</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
 export default class Main extends Component {
+    static navigationOptions = ({ navigation }) => {
+        let drawerLabel = 'Home';
+        let drawerIcon = () => (
+            <ImageBackground
+                source={require('../icons/home_icon.png')}
+                style={{ width: 26, height: 26, tintColor: backgroundColor }}
+            />
+        );
+        return { drawerLabel, drawerIcon };
+    }
     constructor(props) {
         super(props);
         this.state = {
@@ -72,61 +57,44 @@ export default class Main extends Component {
     onRefresh = () => {
         this.refreshDataFromServer();
     }
-    render() {
-        return (<View style={{
-            flex: 1,
-            flexDirection: 'column',
-        }}>      
-            <Headerscreen {...this.props} />      
-            <View style={{
-                flex: 1,
-                backgroundColor: backgroundColor,
-            }}>
-                <FlatList
-                    data={this.state.labs_from_server}
-                    renderItem={({item, index})=>{
-                        console.log(`Item = ${JSON.stringify(item)}, index = ${index}`)
-                        return (
-                            <Image
-                            style={{width: 20, height: 20, margin: 5}}
-                            source = {{uri: 'http://103.199.7.185/images/lab8.png'}}>
-                            </Image>,
-                            <TouchableOpacity style={{
-                                width: 200,
-                                height: 45,
-                                borderRadius: 6,
-                                marginTop: 20,
-                                justifyContent:'center',
-                                alignItems: 'center',
-                                backgroundColor:'#3b5998',
-                                flex: 80
-                            }}
-                            onPress={() => {this.props.navigation.navigate('DashBoardScreen')}}
-                            >
-                            <FlatListItem item={item} index={index}>
-                            </FlatListItem>
-                            
-                            <Text style={{
-                                width: 280,
-                                color: 'white',
-                                fontSize: 20,
-                                textAlign: 'center'
-                            }}>GOTO LAB</Text>
-                            </TouchableOpacity>
-                        );
-                    }}
-                    keyExtractor={(item,index)=>item._id}
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={this.state.refreshing}
-                            onRefresh={this.onRefresh}
-                        />
-                    }
-                    >
-                </FlatList>
-            </View>
-        </View>);
-    }
+
+render(){
+    return (
+         
+      <View style={styles.container}>
+        <Headerscreen {...this.props} />
+        <FlatList
+          style={{flex:1}}
+          data={this.state.labs_from_server}
+          
+          renderItem={({ item }) => <FlatListItem item={item} navigate={this.props.navigation.navigate}/>}
+          keyExtractor={(item,index)=>item._id}
+          refreshControl={
+            <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={this.onRefresh}
+            />
+            }
+        />
+      </View>
+    );
+  }
 }
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: '#F7F7F7',
+    },
+    listItem:{
+      margin:10,
+      padding:10,
+      backgroundColor:"#FFF",
+      width:"80%",
+      flex:1,
+      alignSelf:"center",
+      flexDirection:"row",
+      borderRadius:5
+    }
+  });
 
 

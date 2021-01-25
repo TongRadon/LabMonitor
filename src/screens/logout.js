@@ -1,61 +1,71 @@
 import React, {Component} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-  TextInput,
-  Keyboard,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  TouchableHighlight
-} from 'react-native';
-import { StackNavigator, NavigationActions, createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import { View, Text, ImageBackground,TouchableOpacity} from 'react-native';
 import Headerscreen from './header';
-const backgroundColor = '#0067a7';
+import {LoginScreen, MainScreen} from '../screens/screenNames';
+import AsyncStorage from '@react-native-community/async-storage';
+import Login from './login';
 export default class Logout extends Component {
+    static navigationOptions = ({ navigation }) => {
+        let drawerLabel = 'Logout';
+        let drawerIcon = () => (
+            <ImageBackground
+                source={require('../icons/logout_icon.png')}
+                style={{ width: 26, height: 26, tintColor: "blue" }}
+            />
+        );
+        return { drawerLabel, drawerIcon };
+    }
+    clearToken = async () => {
+        let token = await AsyncStorage.removeItem('access_token');;
+        if (token == null) {
+            this.props.navigation.navigate('LoginScreen'); 
+        }else {
+            alert('Logout ERROR');
+        }
+    }
+
     render() {
         return (<View style={{
             flex: 1,
             flexDirection: 'column',
-        }}>      
-            <Headerscreen {...this.props} />      
+        }}>
+            <Headerscreen {...this.props} />
             <View style={{
                 flex: 1,
-                backgroundColor: backgroundColor,
+                backgroundColor: '#fFffff',
                 alignItems: 'center',
                 justifyContent: 'center'
             }}>
-                <Text style={{ fontWeight: 'bold', fontSize: 22, color: 'white' }}>
-                    You make sure logout
-                </Text>
-                <TouchableHighlight style={{ 
-                                            margin: 20, 
-                                            width: 200, 
-                                            height: 45,
-                                            backgroundColor: '#b22222',
-                                            padding: 10,
-                                            alignItems: 'center',
-                                         }}
-                    onPress={() => {
-                        const { navigate } = this.props.navigation;
-                        navigate(Info);                                             
-                    }}>
-                    <Text style={{color: 'white', fontSize: 18}}>Logout</Text>
-                </TouchableHighlight>
+            <Text style={{
+                color: 'gray',
+                fontWeight: "bold",
+                flexDirection: 'row',
+                marginTop: 40,
+                textAlign: 'center',
+                width: 300,
+                fontSize: 20
+            }}>Do you make sure Logout?</Text>
+            <TouchableOpacity 
+            style={{
+                width: 300,
+                height: 45,
+                borderRadius: 6,
+                marginTop: 20,
+                justifyContent:'center',
+                alignItems: 'center',
+                backgroundColor:'#3b5998'
+              }}
+            onPress={this.clearToken.bind(this)}
+            >
+            <Text style={{
+                width: 280,
+                color: 'white',
+                fontSize: 20,
+                textAlign: 'center'
+            }}>LOGOUT</Text>
+            </TouchableOpacity>                             
             </View>
         </View>);
     }
 }
-
 

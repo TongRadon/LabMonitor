@@ -1,23 +1,5 @@
 import React, {Component} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-  TextInput,
-  Keyboard,
-  TouchableOpacity,
-  TouchableWithoutFeedback
-} from 'react-native';
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {StyleSheet, View, Text, TextInput, Keyboard, TouchableOpacity, TouchableWithoutFeedback, Image} from 'react-native';
 import {NavigationActions} from 'react-navigation';
 import PropTypes from 'prop-types';
 import {LoginScreen, MainScreen} from '../screens/screenNames';
@@ -36,13 +18,15 @@ export default class Login extends Component {
       }
   }
 
-  ComponentDidMount(){
+  componentDidMount(){
       this._loadInitialState().done();
   }
 
   _loadInitialState = async () => {
-      let token2 = await AsyncStorage.getItem(ACCESS_TOKEN);
-      if (token2 !== null) {
+      let token = await AsyncStorage.getItem('access_token');
+      console.log("Runing Function")
+      if (token !== null) {
+          
           this.props.navigation.navigate('MainScreen'); 
       }
   }
@@ -86,8 +70,7 @@ export default class Login extends Component {
               this.getToken();
               this.props.navigation.navigate('MainScreen');
           } else {
-              alert('Invalid username or password')
-              
+              alert('Invalid username or password')   
           }
       } catch(error){
           console.log("catch error: " + error);
@@ -109,8 +92,12 @@ export default class Login extends Component {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
           <View style={styles.welcome}>
+            <Image
+              style={{width: 197, height: 91, marginTop: 50,}}
+              source = {require('../icons/LogoTMA.png')}
+            />
             <Text style={styles.title}> 
-            TMA Lab monitoring
+            Lab monitoring
             </Text>
           </View>
           <View style={styles.login_mail}>
@@ -162,21 +149,23 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent:'center',
-    backgroundColor:'#0067a7'
+    backgroundColor:'#fFffff'
   },
   login_mail:{
     flex: 7,
     flexDirection: 'column',
-    backgroundColor:'#0067a7',
+    backgroundColor:'#FFFFFF',
     justifyContent: 'flex-start',
     alignItems: 'center'
   },
   title:{
-    color: 'white',
+    color: 'gray',
+    fontWeight: "bold",
     flexDirection: 'row',
+    marginTop: 40,
     textAlign: 'center',
-    width: 500,
-    fontSize: 40
+    width: 300,
+    fontSize: 30
   },
   textInputContainer:{
     paddingHorizontal: 10,
@@ -186,6 +175,10 @@ const styles = StyleSheet.create({
   },
   textInput: {
     width: 280,
+    backgroundColor: '#f8f8ff',
+    borderColor: '#708090',
+    borderRadius: 6,
+    borderWidth: 1,
     height: 45
   },
   loginButton: {

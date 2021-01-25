@@ -1,32 +1,17 @@
 import React, {Component} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-  TextInput,
-  Keyboard,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  TouchableHighlight
-} from 'react-native';
-import { StackNavigator, NavigationActions, createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import { ImageBackground, View, Text, TouchableHighlight } from 'react-native';
 import Headerscreen from './header';
 const backgroundColor = '#0067a7';
 export default class Profile extends Component {
-static navigationOptions = ({ navigation }) => {
-        let drawerLabel = 'Logout';
-        return {drawerLabel};
+    static navigationOptions = ({ navigation }) => {
+        let drawerLabel = 'Profile';
+        let drawerIcon = () => (
+            <ImageBackground
+                source={require('../icons/profile_icon.png')}
+                style={{ width: 26, height: 26, tintColor: backgroundColor }}
+            />
+        );
+        return { drawerLabel, drawerIcon };
     }
     render() {
         return (<View style={{
